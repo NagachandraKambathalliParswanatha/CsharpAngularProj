@@ -1,0 +1,210 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+<div class="wrapper">
+  <div class="header">
+    <i class="title">{{title}}</i>
+    <div style="text-align:end">
+      <i class="fa fa-plus-circle" (click)="display='addNew'; title='Add New Customer';" *ngIf="display==='list'">Add New Customer</i>
+      <i class="fa fa-arrow-circle-left" (click)="display='list'; title='Listing of Customers';" *ngIf="display==='addNew'">Back to View All Customer</i>
+    </div>
+  </div>
+  <hr>
+
+  <div class="listing" *ngIf="display==='list'">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Customer ID</th>
+          <th>SSN</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let customer of customerList">
+          <td>{{customer.ws_cust_id}}</td>
+          <td>{{customer.ws_ssn}}</td>
+          <td>{{customer.ws_name}}</td>
+          <td>{{customer.ws_adrs}}</td>
+          <td>{{customer.ws_age}}</td>
+          <td>
+            <span class="fa fa-edit" (click)="GetCustomerByIdForUpdate(customer.ws_cust_id)">Edit</span> &nbsp;
+            <span class="fa fa-trash" (click)="ConfirmDelete(customer.ws_cust_id)">Delete</span>
+            <span class="fa fa-plus-circle" (click)="AddAccount(customer.ws_cust_id)">Add Account</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="addNew" *ngIf="display==='addNew'">
+
+    <form #form="ngForm" (ngSubmit)="form.form.valid && AddCustomer(form)" autocomplete="off">
+      <input type="hidden" name="ws_cust_id" [(ngModel)]="customer.ws_cust_id">
+      <!--<div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <div>
+            <label class="control-label">Customer ID :</label>
+          </div>
+          <div>
+            <input type="text" class="form-control" name="ws_cust_id" [(ngModel)]="customer.ws_cust_id" #CustID="ngModel"/>
+          </div>
+        </div>
+       </div>-->
+
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">SSN :</label>
+        </div>
+        <div>
+          <input type="number" class="form-control" name="ws_ssn" [(ngModel)]="customer.ws_ssn" #custSSN="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted && ws_ssn }" required />
+
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">Name :</label>
+        </div>
+        <div>
+          <input type="text" class="form-control" name="ws_name" [(ngModel)]="customer.ws_name" #custName="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted && ws_name }" required />
+
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">Address :</label>
+        </div>
+        <div>
+          <input type="text" class="form-control" name="ws_adrs" [(ngModel)]="customer.ws_adrs" #city="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted && ws_adrs }" required />
+
+        </div>
+      </div>
+
+      <div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <div>
+            <label class="control-label">Age :</label>
+          </div>
+          <div>
+            <input type="number" class="form-control" name="ws_age" [(ngModel)]="customer.ws_age" #email="ngModel"
+                   [ngClass]="{ 'is-invalid': form.submitted && ws_age }" required />
+
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-success">Save Information</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+
+
+
+
+  <div class="UpdateCust" *ngIf="display==='UpdateCust'">
+
+    <form #form="ngForm" (ngSubmit)="form.form.valid && UpdateCustomer(customer, form)" autocomplete="off">
+      <input type="hidden" name="ws_cust_id" [(ngModel)]="customer.ws_cust_id">
+      <!--<div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <div>
+            <label class="control-label">Customer ID :</label>
+          </div>
+          <div>
+            <input type="text" class="form-control" name="ws_cust_id" [(ngModel)]="customer.ws_cust_id" #CustID="ngModel"/>
+          </div>
+        </div>
+       </div>-->
+
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">SSN :</label>
+        </div>
+        <div>
+          <input type="number" class="form-control" name="ws_ssn" [(ngModel)]="customer.ws_ssn" #custSSN="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted && ws_ssn }" required />
+
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">Name :</label>
+        </div>
+        <div>
+          <input type="text" class="form-control" name="ws_name" [(ngModel)]="customer.ws_name" #custName="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted && ws_name }" required />
+
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">Address :</label>
+        </div>
+        <div>
+          <input type="text" class="form-control" name="ws_adrs" [(ngModel)]="customer.ws_adrs" #city="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted && ws_adrs }" required />
+
+        </div>
+      </div>
+
+      <div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <div>
+            <label class="control-label">Age :</label>
+          </div>
+          <div>
+            <input type="number" class="form-control" name="ws_age" [(ngModel)]="customer.ws_age" #email="ngModel"
+                   [ngClass]="{ 'is-invalid': form.submitted && ws_age }" required />
+
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-success">Save Information</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+
+
+
+
+
+  <div [className]="togglePopUp ? 'modal show' : 'modal fade'" [style.display]="togglePopUp ? 'block' : 'none'">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Confirm Delete</h4>
+        </div>
+        <div class="modal-body">
+          Are you sure want to delete ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success btn-sm" (click)="DeleteCustomer()">Yes</button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="togglePopUp = false;">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

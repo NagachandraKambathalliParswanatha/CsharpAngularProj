@@ -1,0 +1,116 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+<div class="wrapper">
+  <div class="header">
+    <i class="title">{{title}}</i>
+    <div style="text-align:end">
+      <i class="fa fa-plus-circle" (click)="display='addNew'; title='Add New Transaction';" *ngIf="display==='list'">Add New Transactions</i>
+      <i class="fa fa-arrow-circle-left" (click)="display='list'; title='Listing of Transaction';" *ngIf="display==='addNew'">Back to View All Transactions</i>
+    </div>
+  </div>
+  <hr>
+
+  <div class="listing" *ngIf="display==='list'">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Transaction ID</th>
+          <th>Account Type</th>
+          <th>Amount</th>
+          <th>Target Acct. Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transaction of transactionList">
+          <td>{{transaction.ws_trans_id}}</td>
+          <td>{{transaction.ws_accnt_id}}</td>
+          <td>{{transaction.ws_amt}}</td>
+          <td>{{transaction.ws_tgt_typ}}</td>
+          <td>
+            <span class="fa fa-edit" (click)="GetTransactionByIdForUpdate(transaction.ws_cust_id)">Edit</span> &nbsp;
+            <span class="fa fa-trash" (click)="ConfirmDelete(transaction.ws_cust_id)">Delete</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="addNew" *ngIf="display==='addNew'">
+
+    <form #form="ngForm" (ngSubmit)="form.form.valid && AddTransaction(form)" autocomplete="off">
+      <input type="hidden" name="ws_trans_id" [(ngModel)]="transaction.ws_trans_id">
+      <!--<div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <div>
+            <label class="control-label">Customer ID :</label>
+          </div>
+          <div>
+            <input type="text" class="form-control" name="ws_cust_id" [(ngModel)]="customer.ws_cust_id" #CustID="ngModel"/>
+          </div>
+        </div>
+       </div>-->
+
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">Account Type :</label>
+        </div>
+        <div>
+          <input type="number" class="form-control" name="ws_accnt_typ" [(ngModel)]="transaction.ws_accnt_typ" #custSSN="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted }" required />
+
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">Amount :</label>
+        </div>
+        <div>
+          <input type="number" class="form-control" name="ws_amt" [(ngModel)]="transaction.ws_amt" #custName="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted }" required />
+
+        </div>
+      </div>
+
+      <div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <div>
+            <label class="control-label">Target Type :</label>
+          </div>
+          <div>
+            <input type="number" class="form-control" name="ws_tgt_typ" [(ngModel)]="transaction.ws_tgt_typ" #email="ngModel"
+                   [ngClass]="{ 'is-invalid': form.submitted }" required />
+
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-success">Save Information</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+   
+  <div [className]="togglePopUp ? 'modal show' : 'modal fade'" [style.display]="togglePopUp ? 'block' : 'none'">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Confirm Delete</h4>
+        </div>
+        <div class="modal-body">
+          Are you sure want to delete ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success btn-sm" (click)="DeleteTransaction()">Yes</button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="togglePopUp = false;">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

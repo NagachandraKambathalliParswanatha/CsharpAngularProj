@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+<div class="wrapper">
+  <div class="header">
+    <i class="title">{{title}}</i>
+    <div style="text-align:end">
+      <i class="fa fa-plus-circle" (click)="display='addNew'; title='Add New Customer';" *ngIf="display==='list'">Add New Account</i>
+      <i class="fa fa-arrow-circle-left" (click)="display='list'; title='Listing of Customers';" *ngIf="display==='addNew'">Back to View All Account</i>
+    </div>
+  </div>
+  <hr>
+
+  <div class="listing" *ngIf="display==='list'">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Account ID</th>
+          <th>Account Type</th>
+          <th>Account Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let account of accountList">
+          <td>{{account.ws_acct_id}}</td>
+          <td>{{account.ws_acct_type}}</td>
+          <td>{{account.ws_acct_balance}}</td>
+          <td>
+            <span class="fa fa-edit" (click)="GetAccountbyId(account.ws_acct_id)">Edit</span> &nbsp;
+            <span class="fa fa-trash" (click)="ConfirmDelete(account.ws_acct_id)">Delete</span>
+            <span class="fa fa-plus-circle" (click)="AddTransaction(account.ws_cust_id)">Add Transaction</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="addNew" *ngIf="display==='addNew'">
+
+    <form #form="ngForm" (ngSubmit)="form.form.valid && AddAccount(form)" autocomplete="off">
+      <input type="hidden" name="ws_acct_id" [(ngModel)]="account.ws_acct_id">
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">Account Type :</label>
+        </div>
+        <div>
+          <input type="number" class="form-control" name="ws_acct_type" [(ngModel)]="account.ws_acct_type" #ws_acct_type="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted && ws_acct_type }" required />
+
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">Balance :</label>
+        </div>
+        <div>
+          <input type="number" class="form-control" name="ws_acct_balance" [(ngModel)]="account.ws_acct_balance" #custName="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted && ws_acct_balance }" required />
+        </div>
+      </div>
+
+      <div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-success">Save Information</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+
+
+
+
+  <div class="UpdateAcct" *ngIf="display==='UpdateAcct'">
+
+    <form #form="ngForm" (ngSubmit)="form.form.valid && UpdateAccount(account, form)" autocomplete="off">
+      <input type="hidden" name="ws_acct_id" [(ngModel)]="account.ws_acct_id">
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">Account Type :</label>
+        </div>
+        <div>
+          <input type="text" class="form-control" name="ws_acct_type" [(ngModel)]="account.ws_acct_type" #custSSN="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted && ws_acct_type }" required />
+
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div>
+          <label class="control-label">Balance :</label>
+        </div>
+        <div>
+          <input type="text" class="form-control" name="ws_acct_balance" [(ngModel)]="account.ws_acct_balance" #custName="ngModel"
+                 [ngClass]="{ 'is-invalid': form.submitted && ws_acct_balance }" required />
+        </div>
+      </div>
+
+      <div class="form-group col-sm-12 row">
+        <div class="col-sm-4">
+          <button type="submit" class="btn btn-success">Save Information</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
+
+
+
+
+
+  <div [className]="togglePopUp ? 'modal show' : 'modal fade'" [style.display]="togglePopUp ? 'block' : 'none'">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Confirm Delete</h4>
+        </div>
+        <div class="modal-body">
+          Are you sure want to delete ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success btn-sm" (click)="DeleteAccount()">Yes</button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="togglePopUp = false;">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
